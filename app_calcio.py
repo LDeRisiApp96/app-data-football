@@ -133,27 +133,32 @@ elif st.session_state.page == "live":
     col_t1, col_t2, col_t3, col_t4 = st.columns(4)
     
     # Creiamo un contenitore CSS che forza la riga singola su mobile
+    # --- CODICE DA INSERIRE NEL TUO FILE ---
     st.markdown("""
-    <style>
-    .container-bottoni {
-        display: flex !important;
-        flex-direction: row !important;
-        justify-content: space-between !important;
-        gap: 5px !important;
-        margin-bottom: 20px !important;
-    }
-    .container-bottoni button {
-        flex: 1 !important;
-        font-size: 12px !important;
-        height: 45px !important;
-        padding: 2px !important;
-    }
-    </style>
-""", unsafe_allow_html=True)
-
-    # Invece di st.columns(4), usiamo un div custom
-    st.markdown('<div class="container-bottoni">', unsafe_allow_html=True)
-    c1, c2, c3, c4 = st.columns(4) # Manteniamo le colonne di Streamlit come appoggio
+        <style>
+        /* Forza il div padre a essere una riga flessibile */
+        .row-forzata {
+            display: flex !important;
+            flex-direction: row !important;
+            justify-content: space-between !important;
+            width: 100% !important;
+            margin-top: 10px !important;
+        }
+        /* Forza ogni bottone a occupare il 24% della riga */
+        .row-forzata > div {
+            width: 24% !important;
+        }
+        .row-forzata button {
+            width: 100% !important;
+            font-size: 10px !important;
+            padding: 5px 0 !important;
+        }
+        </style>
+    """, unsafe_allow_html=True)
+    
+    # Creazione della riga "forzata"
+    st.markdown('<div class="row-forzata">', unsafe_allow_html=True)
+    c1, c2, c3, c4 = st.columns(4)
     
     with c1:
         if st.button("▶️"): 
