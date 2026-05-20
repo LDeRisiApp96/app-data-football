@@ -87,7 +87,7 @@ def mostra_orologio():
     
     minuto_calcistico = int(passato // 60) + 1
     m, s = int(passato // 60), int(passato % 60)
-    st.markdown(f"<div class='timer-top-right'>⏱️ {m:02d}:{s:02d} ({minuto_calcistico}')</div>", unsafe_allow_html=True)
+    st.markdown(f"<div class='timer-top-left'>⏱️ {m:02d}:{s:02d} ({minuto_calcistico}')</div>", unsafe_allow_html=True)
 
 # ==========================================
 # 1. PAGINA INIZIALE (SETUP)
