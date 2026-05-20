@@ -149,7 +149,7 @@ elif st.session_state.page == "live":
     <style>
     /* Aggiunge spazio in fondo per non farsi coprire dalla barra Streamlit */
     .block-container {
-        padding-bottom: 100px !important;
+        padding-bottom: 10000px !important;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -171,7 +171,7 @@ elif st.session_state.page == "live":
     mostra_orologio()
 
     # Controlli cronometro
-    col_t1, col_t2, col_t3, col_t4 = st.columns(4)
+    col_t1, col_t2,col_t4 = st.columns(4)
     with col_t1:
         st.markdown('<div class="btn-crono">', unsafe_allow_html=True)
         if st.button("▶️ Inizio", disabled=(st.session_state.crono_stato != "Fermo")):
