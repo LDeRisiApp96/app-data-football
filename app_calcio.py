@@ -144,15 +144,7 @@ if st.session_state.page == "setup":
 # ==========================================
 elif st.session_state.page == "live":
     md = st.session_state.match_data
-    
-    st.markdown("""
-    <style>
-    /* Aggiunge spazio in fondo per non farsi coprire dalla barra Streamlit */
-    .block-container {
-        padding-bottom: 1000px !important;
-    }
-    </style>
-""", unsafe_allow_html=True)
+
     st.markdown(f"""
         <div class='match-info-banner'>
             <small>{md['data']} - {md['competizione']} ({st.session_state.tempo_gioco})</small><br>
