@@ -12,7 +12,7 @@ st.markdown("""
     <style>
     /* Aggiunge spazio in fondo per non farsi coprire dalla barra Streamlit */
     .block-container {
-        padding-bottom: 80px !important;
+        padding-bottom: 8100x !important;
     }
     </style>
 """, unsafe_allow_html=True)
