@@ -98,13 +98,13 @@ if st.session_state.page == "setup":
     col_dist1, col_dist2 = st.columns(2)
     with col_dist1:
         titolari_input = st.text_area("📋 TITOLARI (uno per riga)", 
-                                       value="1. Provedel\n4. Rossi\n8. Ferrari\n9. Bianchi\n10. Verdi", height=150)
+                                       value="1.", height=150)
     with col_dist2:
         panchina_input = st.text_area("🪑 PANCHINA (uno per riga)", 
-                                       value="12. Alisson\n14. Neri\n18. Viola\n20. Gialli", height=150)
+                                       value="12. ", height=150)
         
     portieri_input = st.text_input("Specifica il nome del Portiere (staccati da virgola se più di uno)", 
-                                   value="1. Provedel, 12. Alisson")
+                                   value="1.")
     
     st.write("---")
     if st.button("🚀 PROCEDI AL MATCH"):
