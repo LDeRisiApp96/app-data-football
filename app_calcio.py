@@ -9,43 +9,20 @@ st.set_page_config(page_title="Scout Pro", page_icon="⚽", layout="centered")
 
 # --- CSS DEFINITIVO PER BOTTONI E LAYOUT ---
 # --- CSS OTTIMIZZATO PER MOBILE ---
+# --- CSS PER MOBILE E RIGA UNICA ---
 st.markdown("""
     <style>
-    /* Forza tutti i bottoni a essere larghi e alti */
+    /* Forza bottoni a pieno schermo e leggibili */
     div.stButton > button {
         width: 100% !important;
         height: 50px !important;
-        font-size: 15px !important;
-        border-radius: 10px !important;
-        font-weight: bold !important;
-        margin-top: 5px !important;
-        margin-bottom: 5px !important;
+        font-size: 14px !important;
+        margin-top: 2px !important;
+        margin-bottom: 2px !important;
     }
-    
-    /* Gestione specifica per il cronometro in linea */
+    /* Contenitore per allineare bottoni orizzontalmente */
     [data-testid="column"] {
         padding: 2px !important;
-    }
-    
-    /* Rendi il contenitore principale adatto al mobile */
-    .block-container {
-        padding-top: 1rem !important;
-        padding-bottom: 1rem !important;
-        padding-left: 0.5rem !important;
-        padding-right: 0.5rem !important;
-    }
-    
-    .timer-top-right {
-        position: fixed; 
-        top: 10px; 
-        right: 10px;
-        background-color: #FF4B4B; 
-        color: white;
-        padding: 5px 10px; 
-        border-radius: 15px;
-        font-weight: bold; 
-        font-size: 14px;
-        z-index: 9999;
     }
     </style>
 """, unsafe_allow_html=True)
