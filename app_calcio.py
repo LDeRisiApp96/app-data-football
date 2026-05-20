@@ -8,48 +8,44 @@ import plotly.express as px
 st.set_page_config(page_title="Scout Pro", page_icon="⚽", layout="centered")
 
 # --- CSS DEFINITIVO PER BOTTONI E LAYOUT ---
+# --- CSS OTTIMIZZATO PER MOBILE ---
 st.markdown("""
     <style>
+    /* Forza tutti i bottoni a essere larghi e alti */
     div.stButton > button {
-        font-size: 16px !important;
-        height: 55px !important;
         width: 100% !important;
-        border-radius: 12px !important;
-        margin-bottom: 0px !important;
-        color: white !important;
+        height: 50px !important;
+        font-size: 15px !important;
+        border-radius: 10px !important;
         font-weight: bold !important;
+        margin-top: 5px !important;
+        margin-bottom: 5px !important;
     }
     
-    div.stButton > button:has(p:contains("GOL")) { background-color: #10B981 !important; border: none !important; }
-    div.stButton > button:has(p:contains("Tiro")), div.stButton > button:has(p:contains("Passaggio")) { background-color: #3B82F6 !important; border: none !important; }
-    div.stButton > button:has(p:contains("Recuperata")), div.stButton > button:has(p:contains("Subito")) { background-color: #06B6D4 !important; border: none !important; }
-    div.stButton > button:has(p:contains("Persa")), div.stButton > button:has(p:contains("Commesso")) { background-color: #4B5563 !important; border: none !important; }
-    div.stButton > button:has(p:contains("Ammonito")) { background-color: #EAB308 !important; color: black !important; border: none !important; }
-    div.stButton > button:has(p:contains("Espulso")) { background-color: #EF4444 !important; border: none !important; }
-    div.stButton > button:has(p:contains("Parata")) { background-color: #8B5CF6 !important; border: none !important; }
-    
-    div.stButton > button:has(p:contains("CONFERMA CAMBIO")) { background-color: #F97316 !important; border: none !important; height: 45px !important; }
-    div.stButton > button:has(p:contains("PASSA A INTERVALLO")) { background-color: #F97316 !important; border: none !important; height: 45px !important; }
-    
-    .btn-crono button { background-color: #374151 !important; height: 42px !important; font-size: 14px !important; }
-    .main-title { font-size:32px !important; font-weight: bold; text-align: center; color: #1E3A8A; }
-    
-    .match-info-banner { 
-        background-color: #e5e7eb !important; 
-        padding: 15px; 
-        border-radius: 15px; 
-        border-left: 5px solid #1E3A8A; 
-        margin-bottom: 20px; 
+    /* Gestione specifica per il cronometro in linea */
+    [data-testid="column"] {
+        padding: 2px !important;
     }
-    .match-info-banner small { color: #374151 !important; font-size: 14px; }
-    .match-info-banner strong { color: #1E3A8A !important; font-size: 20px; }
+    
+    /* Rendi il contenitore principale adatto al mobile */
+    .block-container {
+        padding-top: 1rem !important;
+        padding-bottom: 1rem !important;
+        padding-left: 0.5rem !important;
+        padding-right: 0.5rem !important;
+    }
     
     .timer-top-right {
-        position: fixed; top: 45px; right: 15px;
-        background-color: #FF4B4B; color: white;
-        padding: 5px 15px; border-radius: 20px;
-        font-weight: bold; font-size: 16px;
-        z-index: 9999; box-shadow: 0px 4px 6px rgba(0,0,0,0.1);
+        position: fixed; 
+        top: 10px; 
+        right: 10px;
+        background-color: #FF4B4B; 
+        color: white;
+        padding: 5px 10px; 
+        border-radius: 15px;
+        font-weight: bold; 
+        font-size: 14px;
+        z-index: 9999;
     }
     </style>
 """, unsafe_allow_html=True)
