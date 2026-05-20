@@ -10,6 +10,14 @@ st.set_page_config(page_title="Scout Pro", page_icon="⚽", layout="centered")
 # --- CSS DEFINITIVO PER BOTTONI E LAYOUT ---
 st.markdown("""
     <style>
+    /* Aggiunge spazio in fondo per non farsi coprire dalla barra Streamlit */
+    .block-container {
+        padding-bottom: 80px !important;
+    }
+    </style>
+""", unsafe_allow_html=True)
+st.markdown("""
+    <style>
     div.stButton > button {
         font-size: 16px !important;
         height: 55px !important;
@@ -418,3 +426,11 @@ elif st.session_state.page == "report":
         st.session_state.page = "setup"
         st.session_state.log_strutturato = []
         st.rerun()
+    st.markdown("""
+    <style>
+    /* Aggiunge spazio in fondo per non farsi coprire dalla barra Streamlit */
+    .block-container {
+        padding-bottom: 80px !important;
+    }
+    </style>
+""", unsafe_allow_html=True)
