@@ -8,21 +8,48 @@ import plotly.express as px
 st.set_page_config(page_title="Scout Pro", page_icon="⚽", layout="centered")
 
 # --- CSS DEFINITIVO PER BOTTONI E LAYOUT ---
-# --- CSS OTTIMIZZATO PER MOBILE ---
-# --- CSS PER MOBILE E RIGA UNICA ---
 st.markdown("""
     <style>
-    /* Forza bottoni a pieno schermo e leggibili */
     div.stButton > button {
+        font-size: 16px !important;
+        height: 55px !important;
         width: 100% !important;
-        height: 50px !important;
-        font-size: 14px !important;
-        margin-top: 2px !important;
-        margin-bottom: 2px !important;
+        border-radius: 12px !important;
+        margin-bottom: 0px !important;
+        color: white !important;
+        font-weight: bold !important;
     }
-    /* Contenitore per allineare bottoni orizzontalmente */
-    [data-testid="column"] {
-        padding: 2px !important;
+    
+    div.stButton > button:has(p:contains("GOL")) { background-color: #10B981 !important; border: none !important; }
+    div.stButton > button:has(p:contains("Tiro")), div.stButton > button:has(p:contains("Passaggio")) { background-color: #3B82F6 !important; border: none !important; }
+    div.stButton > button:has(p:contains("Recuperata")), div.stButton > button:has(p:contains("Subito")) { background-color: #06B6D4 !important; border: none !important; }
+    div.stButton > button:has(p:contains("Persa")), div.stButton > button:has(p:contains("Commesso")) { background-color: #4B5563 !important; border: none !important; }
+    div.stButton > button:has(p:contains("Ammonito")) { background-color: #EAB308 !important; color: black !important; border: none !important; }
+    div.stButton > button:has(p:contains("Espulso")) { background-color: #EF4444 !important; border: none !important; }
+    div.stButton > button:has(p:contains("Parata")) { background-color: #8B5CF6 !important; border: none !important; }
+    
+    div.stButton > button:has(p:contains("CONFERMA CAMBIO")) { background-color: #F97316 !important; border: none !important; height: 45px !important; }
+    div.stButton > button:has(p:contains("PASSA A INTERVALLO")) { background-color: #F97316 !important; border: none !important; height: 45px !important; }
+    
+    .btn-crono button { background-color: #374151 !important; height: 42px !important; font-size: 14px !important; }
+    .main-title { font-size:32px !important; font-weight: bold; text-align: center; color: #1E3A8A; }
+    
+    .match-info-banner { 
+        background-color: #e5e7eb !important; 
+        padding: 15px; 
+        border-radius: 15px; 
+        border-left: 5px solid #1E3A8A; 
+        margin-bottom: 20px; 
+    }
+    .match-info-banner small { color: #374151 !important; font-size: 14px; }
+    .match-info-banner strong { color: #1E3A8A !important; font-size: 20px; }
+    
+    .timer-top-right {
+        position: fixed; top: 45px; right: 15px;
+        background-color: #FF4B4B; color: white;
+        padding: 5px 15px; border-radius: 20px;
+        font-weight: bold; font-size: 16px;
+        z-index: 9999; box-shadow: 0px 4px 6px rgba(0,0,0,0.1);
     }
     </style>
 """, unsafe_allow_html=True)
@@ -128,51 +155,46 @@ elif st.session_state.page == "live":
     mostra_orologio()
 
     # Controlli cronometro
-    # --- RIGA COMANDI CRONOMETRO 1x4 ---
-    # Definiamo le colonne
     col_t1, col_t2, col_t3, col_t4 = st.columns(4)
-    
-    # Creiamo un contenitore CSS che forza la riga singola su mobile
-    # --- CODICE DA INSERIRE NEL TUO FILE ---
-    st.markdown("""
-        <style>
-        /* Forza il div padre a essere una riga flessibile */
-        .row-forzata {
-            display: flex !important;
-            flex-direction: row !important;
-            justify-content: space-between !important;
-            width: 100% !important;
-            margin-top: 10px !important;
-        }
-        /* Forza ogni bottone a occupare il 24% della riga */
-        .row-forzata > div {
-            width: 24% !important;
-        }
-        .row-forzata button {
-            width: 100% !important;
-            font-size: 10px !important;
-            padding: 5px 0 !important;
-        }
-        </style>
-    """, unsafe_allow_html=True)
-    
-    # Creazione della riga "forzata"
-    st.markdown('<div class="row-forzata">', unsafe_allow_html=True)
-    c1, c2, c3, c4 = st.columns(4)
-    
-    with c1:
-        if st.button("▶️"): 
-            st.session_state.crono_stato = "In Corso"; st.session_state.ultimo_avvio = time.time(); st.rerun()
-    with c2:
-        if st.button("⏸️"): 
-            st.session_state.crono_stato = "Interrotto"; st.session_state.tempo_accumulato += time.time() - st.session_state.ultimo_avvio; st.rerun()
-    with c3:
-        if st.button("🔄"): 
-            st.session_state.crono_stato = "In Corso"; st.session_state.ultimo_avvio = time.time(); st.rerun()
-    with c4:
-        if st.button("⏹️"): 
-            st.session_state.page = "report"; st.rerun()
-    st.markdown('</div>', unsafe_allow_html=True)
+    with col_t1:
+        st.markdown('<div class="btn-crono">', unsafe_allow_html=True)
+        if st.button("▶️ Inizio", disabled=(st.session_state.crono_stato != "Fermo")):
+            st.session_state.crono_stato = "In Corso"
+            st.session_state.ultimo_avvio = time.time()
+            st.rerun()
+        st.markdown('</div>', unsafe_allow_html=True)
+    with col_t2:
+        st.markdown('<div class="btn-crono">', unsafe_allow_html=True)
+        if st.button("⏸️ Sosta", disabled=(st.session_state.crono_stato != "In Corso")):
+            st.session_state.crono_stato = "Interrotto"
+            st.session_state.tempo_accumulato += time.time() - st.session_state.ultimo_avvio
+            st.rerun()
+        st.markdown('</div>', unsafe_allow_html=True)
+    with col_t3:
+        st.markdown('<div class="btn-crono">', unsafe_allow_html=True)
+        if st.button("🔄 Riprendi", disabled=(st.session_state.crono_stato != "Interrotto")):
+            st.session_state.crono_stato = "In Corso"
+            st.session_state.ultimo_avvio = time.time()
+            st.rerun()
+        st.markdown('</div>', unsafe_allow_html=True)
+    with col_t4:
+        st.markdown('<div class="btn-crono">', unsafe_allow_html=True)
+        if st.button("⏹️ Fine Match", disabled=(st.session_state.crono_stato == "Fermo" and st.session_state.tempo_accumulato == 0.0)):
+            st.session_state.page = "report" 
+            st.session_state.crono_stato = "Fermo"
+            st.session_state.ultimo_avvio = None
+            st.rerun()
+        st.markdown('</div>', unsafe_allow_html=True)
+
+    # Intervallo
+    if st.session_state.tempo_gioco == "1° Tempo":
+        if st.button("⏸️ PASSA A INTERVALLO / 2° TEMPO"):
+            if st.session_state.crono_stato == "In Corso":
+                st.session_state.tempo_accumulato += time.time() - st.session_state.ultimo_avvio
+            st.session_state.tempo_gioco = "2° Tempo"
+            st.session_state.crono_stato = "Fermo"
+            st.session_state.tempo_accumulato = 45.0 * 60.0
+            st.rerun()
 
     st.write("---")
 
