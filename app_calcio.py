@@ -134,42 +134,40 @@ elif st.session_state.page == "live":
     
     # Creiamo un contenitore CSS che forza la riga singola su mobile
     st.markdown("""
-        <style>
-        /* Forza le colonne a stare vicine e non andare a capo */
-        [data-testid="column"] {
-            flex: 1 1 25% !important;
-            max-width: 25% !important;
-        }
-        /* Riduci il padding dei bottoni per farli stare meglio */
-        div.stButton > button {
-            padding: 5px 2px !important;
-            font-size: 11px !important; /* Testo più piccolo per non andare a capo */
-        }
-        </style>
-    """, unsafe_allow_html=True)
+    <style>
+    .container-bottoni {
+        display: flex !important;
+        flex-direction: row !important;
+        justify-content: space-between !important;
+        gap: 5px !important;
+        margin-bottom: 20px !important;
+    }
+    .container-bottoni button {
+        flex: 1 !important;
+        font-size: 12px !important;
+        height: 45px !important;
+        padding: 2px !important;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
+    # Invece di st.columns(4), usiamo un div custom
+    st.markdown('<div class="container-bottoni">', unsafe_allow_html=True)
+    c1, c2, c3, c4 = st.columns(4) # Manteniamo le colonne di Streamlit come appoggio
     
-    # Inseriamo i bottoni nelle colonne
-    with col_t1:
-        if st.button("▶️ Inizio"): 
+    with c1:
+        if st.button("▶️"): 
             st.session_state.crono_stato = "In Corso"; st.session_state.ultimo_avvio = time.time(); st.rerun()
-    with col_t2:
-        if st.button("⏸️ Sosta"): 
+    with c2:
+        if st.button("⏸️"): 
             st.session_state.crono_stato = "Interrotto"; st.session_state.tempo_accumulato += time.time() - st.session_state.ultimo_avvio; st.rerun()
-    with col_t3:
-        if st.button("🔄 Ripr."): 
+    with c3:
+        if st.button("🔄"): 
             st.session_state.crono_stato = "In Corso"; st.session_state.ultimo_avvio = time.time(); st.rerun()
-    with col_t4:
-        if st.button("⏹️ Fine"): 
+    with c4:
+        if st.button("⏹️"): 
             st.session_state.page = "report"; st.rerun()
-    # Intervallo
-    if st.session_state.tempo_gioco == "1° Tempo":
-        if st.button("⏸️ PASSA A INTERVALLO / 2° TEMPO"):
-            if st.session_state.crono_stato == "In Corso":
-                st.session_state.tempo_accumulato += time.time() - st.session_state.ultimo_avvio
-            st.session_state.tempo_gioco = "2° Tempo"
-            st.session_state.crono_stato = "Fermo"
-            st.session_state.tempo_accumulato = 45.0 * 60.0
-            st.rerun()
+    st.markdown('</div>', unsafe_allow_html=True)
 
     st.write("---")
 
