@@ -12,7 +12,7 @@ st.markdown("""
     <style>
     /* Aggiunge spazio in fondo per non farsi coprire dalla barra Streamlit */
     .block-container {
-        padding-bottom: 8100x !important;
+        padding-bottom: 100px !important;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -106,13 +106,13 @@ if st.session_state.page == "setup":
     col_dist1, col_dist2 = st.columns(2)
     with col_dist1:
         titolari_input = st.text_area("📋 TITOLARI (uno per riga)", 
-                                       value="1. Provedel\n4. Rossi\n8. Ferrari\n9. Bianchi\n10. Verdi", height=150)
+                                       value="1.", height=150)
     with col_dist2:
         panchina_input = st.text_area("🪑 PANCHINA (uno per riga)", 
-                                       value="12. Alisson\n14. Neri\n18. Viola\n20. Gialli", height=150)
+                                       value="12.", height=150)
         
     portieri_input = st.text_input("Specifica il nome del Portiere (staccati da virgola se più di uno)", 
-                                   value="1. Provedel, 12. Alisson")
+                                   value="1.")
     
     st.write("---")
     if st.button("🚀 PROCEDI AL MATCH"):
@@ -144,7 +144,15 @@ if st.session_state.page == "setup":
 # ==========================================
 elif st.session_state.page == "live":
     md = st.session_state.match_data
-
+    
+    st.markdown("""
+    <style>
+    /* Aggiunge spazio in fondo per non farsi coprire dalla barra Streamlit */
+    .block-container {
+        padding-bottom: 100px !important;
+    }
+    </style>
+""", unsafe_allow_html=True)
     st.markdown(f"""
         <div class='match-info-banner'>
             <small>{md['data']} - {md['competizione']} ({st.session_state.tempo_gioco})</small><br>
@@ -171,13 +179,13 @@ elif st.session_state.page == "live":
             st.session_state.ultimo_avvio = time.time()
             st.rerun()
         st.markdown('</div>', unsafe_allow_html=True)
-    with col_t2:
-        st.markdown('<div class="btn-crono">', unsafe_allow_html=True)
-        if st.button("⏸️ Sosta", disabled=(st.session_state.crono_stato != "In Corso")):
-            st.session_state.crono_stato = "Interrotto"
-            st.session_state.tempo_accumulato += time.time() - st.session_state.ultimo_avvio
-            st.rerun()
-        st.markdown('</div>', unsafe_allow_html=True)
+    # with col_t2:
+    #     st.markdown('<div class="btn-crono">', unsafe_allow_html=True)
+    #     if st.button("⏸️ Sosta", disabled=(st.session_state.crono_stato != "In Corso")):
+    #         st.session_state.crono_stato = "Interrotto"
+    #         st.session_state.tempo_accumulato += time.time() - st.session_state.ultimo_avvio
+    #         st.rerun()
+    #     st.markdown('</div>', unsafe_allow_html=True)
     with col_t3:
         st.markdown('<div class="btn-crono">', unsafe_allow_html=True)
         if st.button("🔄 Riprendi", disabled=(st.session_state.crono_stato != "Interrotto")):
