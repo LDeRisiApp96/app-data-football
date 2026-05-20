@@ -149,7 +149,7 @@ elif st.session_state.page == "live":
     <style>
     /* Aggiunge spazio in fondo per non farsi coprire dalla barra Streamlit */
     .block-container {
-        padding-bottom: 10000px !important;
+        padding-bottom: 1000px !important;
     }
     </style>
 """, unsafe_allow_html=True)
