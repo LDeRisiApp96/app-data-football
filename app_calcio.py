@@ -35,6 +35,7 @@ st.markdown("""
         padding: 1rem !important;
         padding-bottom: 120px !important;
         max-width: 100% !important;
+        padding-top: 120px !important;
     }
     
     /* Riduco margini su mobile */
@@ -42,6 +43,7 @@ st.markdown("""
         .block-container {
             padding: 0.5rem !important;
             padding-bottom: 120px !important;
+            padding-top: 80px !important;
         }
     }
     
@@ -76,18 +78,25 @@ st.markdown("""
     div.stButton > button:has(p:contains("CONFERMA")) { background-color: #F97316 !important; border: none !important; }
     div.stButton > button:has(p:contains("PASSA A")) { background-color: #F97316 !important; border: none !important; }
     
-    /* Bottoni cronometro compatti */
+    /* Bottoni cronometro compatti - su una sola riga */
     .btn-crono button { 
         background-color: #374151 !important; 
         height: 44px !important; 
         font-size: 12px !important;
         margin-bottom: 0.3rem !important;
+        flex: 1 !important;
+        margin-right: 0.25rem !important;
+    }
+    
+    .btn-crono button:last-child {
+        margin-right: 0 !important;
     }
     
     @media (max-width: 768px) {
         .btn-crono button {
             height: 42px !important;
             font-size: 11px !important;
+            margin-right: 0.15rem !important;
         }
     }
     
@@ -342,28 +351,25 @@ elif st.session_state.page == "live":
     # Avvio del fragment orologio in background
     mostra_orologio()
 
-    # Controlli cronometro - 2 colonne su mobile, 3 su desktop
+    # Controlli cronometro - 3 bottoni su una riga
     tab_crono = st.tabs(["⏱️ Cronometro"])
     with tab_crono[0]:
         col_t1, col_t2, col_t3 = st.columns(3)
+        
         with col_t1:
-            st.markdown('<div class="btn-crono">', unsafe_allow_html=True)
+            st.markdown('<div class="btn-crono" style="display: flex; gap: 0.25rem;">', unsafe_allow_html=True)
             if st.button("▶️ Inizio", use_container_width=True, disabled=(st.session_state.crono_stato != "Fermo")):
                 st.session_state.crono_stato = "In Corso"
                 st.session_state.ultimo_avvio = time.time()
                 st.rerun()
-            st.markdown('</div>', unsafe_allow_html=True)
         
         with col_t2:
-            st.markdown('<div class="btn-crono">', unsafe_allow_html=True)
             if st.button("🔄 Riprendi", use_container_width=True, disabled=(st.session_state.crono_stato != "Interrotto")):
                 st.session_state.crono_stato = "In Corso"
                 st.session_state.ultimo_avvio = time.time()
                 st.rerun()
-            st.markdown('</div>', unsafe_allow_html=True)
         
         with col_t3:
-            st.markdown('<div class="btn-crono">', unsafe_allow_html=True)
             if st.button("⏹️ Fine", use_container_width=True, disabled=(st.session_state.crono_stato == "Fermo" and st.session_state.tempo_accumulato == 0.0)):
                 st.session_state.page = "report" 
                 st.session_state.crono_stato = "Fermo"
@@ -436,7 +442,7 @@ elif st.session_state.page == "live":
                 evento_registrato = "Gol Subito"
         st.write("---")
 
-    # Bottoni evento - griglia 2 colonne
+    # Bottoni evento - griglia 2 colonne (coppie di bottoni)
     c1, c2 = st.columns(2)
     with c1:
         if st.button("⚽ GOL!", use_container_width=True, disabled=disabilitato): 
