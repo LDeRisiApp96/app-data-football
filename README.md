@@ -17,7 +17,7 @@ Questo software è **proprietario e confidenziale**. È **VIETATO**:
 - ❌ Creare versioni derivate
 
 **Per accesso, utilizzo commerciale o collaborazioni:** 
-📧 Contatta l'autore per una licenza autorizzata
+📧 Contatta l'autore per una licenza autorizzata: lucreziaderisi12@gmail.com
 
 ---
 
