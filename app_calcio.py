@@ -193,53 +193,44 @@ elif st.session_state.page == "live":
     #         st.session_state.ultimo_avvio = None
     #         st.rerun()
     #     st.markdown('</div>', unsafe_allow_html=True)
-    st.markdown("""
-    <style>
-    /* Forza il contenitore a essere una riga singola su qualsiasi dispositivo */
-    .mobile-row {
-        display: flex !important;
-        flex-direction: row !important;
-        justify-content: space-between !important;
-        width: 100% !important;
-        gap: 5px !important;
-    }
-    /* Forza ogni bottone a occupare lo spazio necessario senza andare a capo */
-    .mobile-row > div {
-        flex: 1 !important;
-        min-width: 0 !important;
-    }
-    .mobile-row button {
-        width: 100% !important;
-        font-size: 12px !important;
-        padding: 5px 2px !important;
-        white-space: nowrap !important;
-    }
-    </style>
-""", unsafe_allow_html=True)
+   # --- CODICE LIVE CON BOTTONI FORZATI IN LINEA ---
 
-    # --- CODICE LIVE (SOSTITUISCI LA SEZIONE BOTTONI) ---
-    st.markdown('<div class="mobile-row">', unsafe_allow_html=True)
+    # CSS ESCLUSIVO PER QUESTI BOTTONI
+    st.markdown("""
+        <style>
+        .container-mobile-line {
+            display: flex !important;
+            flex-direction: row !important;
+            gap: 5px !important;
+            padding: 10px 0 !important;
+        }
+        .container-mobile-line button {
+            flex: 1 !important;
+            font-size: 12px !important;
+            height: 40px !important;
+        }
+        </style>
+    """, unsafe_allow_html=True)
+
+    # NON USARE st.columns() qui!
+    st.markdown('<div class="container-mobile-line">', unsafe_allow_html=True)
     
-    # Usiamo colonne di supporto ma dentro il div forzato
-    col1, col2, col3 = st.columns(3)
-    
-    with col1:
-        if st.button("▶️ Inizio", disabled=(st.session_state.crono_stato != "Fermo")):
-            st.session_state.crono_stato = "In Corso"
-            st.session_state.ultimo_avvio = time.time()
-            st.rerun()
-    
-    with col2:
-        if st.button("🔄 Ripr.", disabled=(st.session_state.crono_stato != "Interrotto")):
-            st.session_state.crono_stato = "In Corso"
-            st.session_state.ultimo_avvio = time.time()
-            st.rerun()
-    
-    with col3:
-        if st.button("⏹️ Fine", disabled=(st.session_state.crono_stato == "Fermo" and st.session_state.tempo_accumulato == 0.0)):
-            st.session_state.page = "report"
-            st.rerun()
-    
+    # Crea i bottoni manualmente tramite form o link, oppure 
+    # se vuoi usare st.button, dobbiamo avvolgerli così:
+    if st.button("▶️ Inizio", key="btn_inizio"):
+        st.session_state.crono_stato = "In Corso"
+        st.session_state.ultimo_avvio = time.time()
+        st.rerun()
+        
+    if st.button("🔄 Ripr.", key="btn_ripr"):
+        st.session_state.crono_stato = "In Corso"
+        st.session_state.ultimo_avvio = time.time()
+        st.rerun()
+        
+    if st.button("⏹️ Fine", key="btn_fine"):
+        st.session_state.page = "report"
+        st.rerun()
+        
     st.markdown('</div>', unsafe_allow_html=True)
 
     # Intervallo
