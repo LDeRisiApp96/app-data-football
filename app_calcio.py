@@ -6,18 +6,30 @@ import plotly.express as px
 
 # --- CONFIGURAZIONE PAGINA ---
 st.set_page_config(page_title="Scout Pro", page_icon="⚽", layout="centered")
-###config mobile
+
 st.markdown("""
     <style>
-    /* Forza il contenitore delle colonne a restare in riga anche su mobile */
-    [data-testid="column"] {
-        width: calc(25% - 1rem) !important;
-        flex: 1 1 calc(25% - 1rem) !important;
-        min-width: calc(25% - 1rem) !important;
+    /* Forza sfondo scuro e testo chiaro su tutto il corpo dell'app */
+    .stApp {
+        background-color: #0E1117 !important;
+        color: #FAFAFA !important;
     }
-    /* Rimuove lo spazio extra che spesso causa l'impilamento */
-    div[data-testid="stHorizontalBlock"] {
-        gap: 0.5rem !important;
+    
+    /* Forza il colore del testo dentro i bottoni e altri elementi */
+    body, p, div, span, label {
+        color: #FAFAFA !important;
+    }
+    
+    /* Assicurati che i menu a tendina (selectbox) siano leggibili */
+    div[data-testid="stSelectbox"] div {
+        color: #FAFAFA !important;
+        background-color: #262730 !important;
+    }
+    
+    /* Forza il colore di sfondo delle aree di testo */
+    textarea {
+        background-color: #262730 !important;
+        color: #FAFAFA !important;
     }
     </style>
 """, unsafe_allow_html=True)
