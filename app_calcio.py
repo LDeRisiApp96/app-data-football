@@ -5,57 +5,67 @@ import pandas as pd
 import plotly.express as px
 
 # --- CONFIGURAZIONE PAGINA ---
-st.set_page_config(page_title="Scout Pro", page_icon="⚽", layout="centered")
+st.set_page_config(page_title="Scout Pro", page_icon="⚽", layout="wide", initial_sidebar_state="collapsed")
 
+# --- CSS MOBILE RESPONSIVE ---
 st.markdown("""
     <style>
-    /* Forza sfondo scuro e testo chiaro su tutto il corpo dell'app */
+    /* Tema scuro */
     .stApp {
         background-color: #0E1117 !important;
         color: #FAFAFA !important;
     }
     
-    /* Forza il colore del testo dentro i bottoni e altri elementi */
     body, p, div, span, label {
         color: #FAFAFA !important;
     }
     
-    /* Assicurati che i menu a tendina (selectbox) siano leggibili */
     div[data-testid="stSelectbox"] div {
         color: #FAFAFA !important;
         background-color: #262730 !important;
     }
     
-    /* Forza il colore di sfondo delle aree di testo */
     textarea {
         background-color: #262730 !important;
         color: #FAFAFA !important;
     }
-    </style>
-""", unsafe_allow_html=True)
-
-# --- CSS DEFINITIVO PER BOTTONI E LAYOUT ---
-st.markdown("""
-    <style>
-    /* Aggiunge spazio in fondo per non farsi coprire dalla barra Streamlit */
+    
+    /* Blocco container mobile ottimizzato */
     .block-container {
-        padding-bottom: 100px !important;
-    }
-    </style>
-""", unsafe_allow_html=True)
-
-st.markdown("""
-    <style>
-    div.stButton > button {
-        font-size: 16px !important;
-        height: 55px !important;
-        width: 100% !important;
-        border-radius: 12px !important;
-        margin-bottom: 0px !important;
-        color: white !important;
-        font-weight: bold !important;
+        padding: 1rem !important;
+        padding-bottom: 120px !important;
+        max-width: 100% !important;
     }
     
+    /* Riduco margini su mobile */
+    @media (max-width: 768px) {
+        .block-container {
+            padding: 0.5rem !important;
+            padding-bottom: 120px !important;
+        }
+    }
+    
+    /* Bottoni ottimizzati per mobile */
+    div.stButton > button {
+        font-size: 14px !important;
+        height: 50px !important;
+        width: 100% !important;
+        border-radius: 8px !important;
+        margin-bottom: 0.5rem !important;
+        color: white !important;
+        font-weight: bold !important;
+        touch-action: manipulation !important;
+    }
+    
+    @media (max-width: 768px) {
+        div.stButton > button {
+            font-size: 13px !important;
+            height: 48px !important;
+            padding: 0.5rem !important;
+        }
+    }
+    
+    /* Colori bottoni */
     div.stButton > button:has(p:contains("GOL")) { background-color: #10B981 !important; border: none !important; }
     div.stButton > button:has(p:contains("Tiro")), div.stButton > button:has(p:contains("Passaggio")) { background-color: #3B82F6 !important; border: none !important; }
     div.stButton > button:has(p:contains("Recuperata")), div.stButton > button:has(p:contains("Subito")) { background-color: #06B6D4 !important; border: none !important; }
@@ -63,29 +73,169 @@ st.markdown("""
     div.stButton > button:has(p:contains("Ammonito")) { background-color: #EAB308 !important; color: black !important; border: none !important; }
     div.stButton > button:has(p:contains("Espulso")) { background-color: #EF4444 !important; border: none !important; }
     div.stButton > button:has(p:contains("Parata")) { background-color: #8B5CF6 !important; border: none !important; }
+    div.stButton > button:has(p:contains("CONFERMA")) { background-color: #F97316 !important; border: none !important; }
+    div.stButton > button:has(p:contains("PASSA A")) { background-color: #F97316 !important; border: none !important; }
     
-    div.stButton > button:has(p:contains("CONFERMA CAMBIO")) { background-color: #F97316 !important; border: none !important; height: 45px !important; }
-    div.stButton > button:has(p:contains("PASSA A INTERVALLO")) { background-color: #F97316 !important; border: none !important; height: 45px !important; }
+    /* Bottoni cronometro compatti */
+    .btn-crono button { 
+        background-color: #374151 !important; 
+        height: 44px !important; 
+        font-size: 12px !important;
+        margin-bottom: 0.3rem !important;
+    }
     
-    .btn-crono button { background-color: #374151 !important; height: 42px !important; font-size: 14px !important; }
-    .main-title { font-size:32px !important; font-weight: bold; text-align: center; color: #1E3A8A; }
+    @media (max-width: 768px) {
+        .btn-crono button {
+            height: 42px !important;
+            font-size: 11px !important;
+        }
+    }
     
+    /* Titolo responsivo */
+    .main-title { 
+        font-size: 28px !important;
+        font-weight: bold; 
+        text-align: center; 
+        color: #1E3A8A;
+        margin-bottom: 1rem !important;
+    }
+    
+    @media (max-width: 768px) {
+        .main-title {
+            font-size: 22px !important;
+            margin-bottom: 0.75rem !important;
+        }
+    }
+    
+    /* Banner info match */
     .match-info-banner { 
         background-color: #e5e7eb !important; 
-        padding: 15px; 
-        border-radius: 15px; 
-        border-left: 5px solid #1E3A8A; 
-        margin-bottom: 20px; 
+        padding: 12px; 
+        border-radius: 12px; 
+        border-left: 4px solid #1E3A8A; 
+        margin-bottom: 1rem;
+        font-size: 14px;
     }
-    .match-info-banner small { color: #374151 !important; font-size: 14px; }
-    .match-info-banner strong { color: #1E3A8A !important; font-size: 20px; }
     
-    .timer-top-right {
-        position: fixed; top: 45px; right: 15px;
-        background-color: #FF4B4B; color: white;
-        padding: 5px 15px; border-radius: 20px;
-        font-weight: bold; font-size: 16px;
-        z-index: 9999; box-shadow: 0px 4px 6px rgba(0,0,0,0.1);
+    .match-info-banner small { 
+        color: #374151 !important; 
+        font-size: 12px; 
+        display: block;
+        margin-bottom: 0.3rem;
+    }
+    
+    .match-info-banner strong { 
+        color: #1E3A8A !important; 
+        font-size: 16px;
+        display: block;
+    }
+    
+    @media (max-width: 768px) {
+        .match-info-banner {
+            padding: 10px;
+            margin-bottom: 0.75rem;
+        }
+        .match-info-banner small {
+            font-size: 11px;
+        }
+        .match-info-banner strong {
+            font-size: 14px;
+        }
+    }
+    
+    /* Timer fisso top-right */
+    .timer-top-left {
+        position: fixed; 
+        top: 50px; 
+        right: 10px;
+        background-color: #FF4B4B; 
+        color: white;
+        padding: 6px 12px; 
+        border-radius: 20px;
+        font-weight: bold; 
+        font-size: 14px;
+        z-index: 9999; 
+        box-shadow: 0px 4px 6px rgba(0,0,0,0.3);
+    }
+    
+    @media (max-width: 768px) {
+        .timer-top-left {
+            font-size: 12px;
+            padding: 5px 10px;
+            top: 48px;
+            right: 8px;
+        }
+    }
+    
+    /* Input text area mobile */
+    textarea {
+        font-size: 13px !important;
+    }
+    
+    /* Selectbox mobile */
+    div[data-testid="stSelectbox"] {
+        margin-bottom: 0.5rem !important;
+    }
+    
+    /* Espander mobile */
+    .st-expander {
+        border-color: #374151 !important;
+    }
+    
+    /* Colonne responsive - stack su mobile */
+    @media (max-width: 768px) {
+        div[data-testid="column"] {
+            flex-direction: column !important;
+            width: 100% !important;
+        }
+    }
+    
+    /* Metriche responsive */
+    [data-testid="metric-container"] {
+        padding: 0.75rem !important;
+    }
+    
+    @media (max-width: 768px) {
+        [data-testid="metric-container"] {
+            padding: 0.5rem !important;
+        }
+        .metric-label {
+            font-size: 11px !important;
+        }
+    }
+    
+    /* Tabelle scrollable */
+    [data-testid="dataFrame"] {
+        font-size: 12px !important;
+    }
+    
+    @media (max-width: 768px) {
+        [data-testid="dataFrame"] {
+            font-size: 11px !important;
+        }
+    }
+    
+    /* Caption minore per mobile */
+    .caption-small {
+        font-size: 12px;
+        padding: 0.5rem 0;
+    }
+    
+    @media (max-width: 768px) {
+        .caption-small {
+            font-size: 11px;
+        }
+    }
+    
+    /* Alert box */
+    .stWarning, .stError, .stSuccess {
+        font-size: 13px !important;
+        padding: 0.75rem !important;
+    }
+    
+    /* Separatore */
+    hr {
+        margin: 0.75rem 0 !important;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -105,7 +255,6 @@ if "tutti_giocatori_coinvolti" not in st.session_state: st.session_state.tutti_g
 # ==========================================
 # GESTIONE CRONOMETRO FLUIDO (FRAGMENT)
 # ==========================================
-# Questa funzione gira nativamente sul cloud ad altissima velocità
 @st.fragment(run_every=1.0)
 def mostra_orologio():
     if st.session_state.crono_stato == "In Corso":
@@ -123,27 +272,30 @@ def mostra_orologio():
 if st.session_state.page == "setup":
     st.markdown("<p class='main-title'>🆕 Nuovo Match</p>", unsafe_allow_html=True)
     
-    data_match = st.date_input("Data della partita", datetime.date.today())
-    competizione = st.text_input("Competizione", placeholder="Es. Serie D, Promozione...")
+    data_match = st.date_input("📅 Data della partita", datetime.date.today())
+    competizione = st.text_input("🏆 Competizione", placeholder="Es. Serie D, Promozione...")
     
     col_sq1, col_sq2 = st.columns(2)
-    with col_sq1: casa = st.text_input("Squadra Casa", placeholder="Casa")
-    with col_sq2: trasferta = st.text_input("Squadra Trasferta", placeholder="Trasferta")
+    with col_sq1: 
+        casa = st.text_input("🏠 Casa", placeholder="Casa")
+    with col_sq2: 
+        trasferta = st.text_input("✈️ Trasferta", placeholder="Trasferta")
     
     st.write("---")
+    
     col_dist1, col_dist2 = st.columns(2)
     with col_dist1:
         titolari_input = st.text_area("📋 TITOLARI (uno per riga)", 
-                                       value="1.", height=150)
+                                       value="1.", height=120)
     with col_dist2:
         panchina_input = st.text_area("🪑 PANCHINA (uno per riga)", 
-                                       value="12.", height=150)
+                                       value="12.", height=120)
         
-    portieri_input = st.text_input("Specifica il nome del Portiere (staccati da virgola se più di uno)", 
+    portieri_input = st.text_input("🧤 Portieri (separati da virgola se più di uno)", 
                                    value="1.")
     
     st.write("---")
-    if st.button("🚀 PROCEDI AL MATCH"):
+    if st.button("🚀 PROCEDI AL MATCH", use_container_width=True):
         if casa and trasferta:
             tits = [g.strip() for g in titolari_input.split("\n") if g.strip()]
             pancs = [g.strip() for g in panchina_input.split("\n") if g.strip()]
@@ -165,7 +317,7 @@ if st.session_state.page == "setup":
             st.session_state.log_strutturato = [] 
             st.rerun()
         else:
-            st.error("Inserisci i nomi delle squadre!")
+            st.error("❌ Inserisci i nomi delle squadre!")
 
 # ==========================================
 # 2. PAGINA LIVE (RACCOLTA DATI)
@@ -175,7 +327,7 @@ elif st.session_state.page == "live":
 
     st.markdown(f"""
         <div class='match-info-banner'>
-            <small>{md['data']} - {md['competizione']} ({st.session_state.tempo_gioco})</small><br>
+            <small>{md['data']} - {md['competizione']} ({st.session_state.tempo_gioco})</small>
             <strong>{md['casa']} vs {md['trasferta']}</strong>
         </div>
     """, unsafe_allow_html=True)
@@ -190,51 +342,48 @@ elif st.session_state.page == "live":
     # Avvio del fragment orologio in background
     mostra_orologio()
 
-    # Controlli cronometro
-    col_t1, col_t3,col_t4 = st.columns(3)
-    with col_t1:
-        st.markdown('<div class="btn-crono">', unsafe_allow_html=True)
-        if st.button("▶️ Inizio", disabled=(st.session_state.crono_stato != "Fermo")):
-            st.session_state.crono_stato = "In Corso"
-            st.session_state.ultimo_avvio = time.time()
-            st.rerun()
-        st.markdown('</div>', unsafe_allow_html=True)
-    # with col_t2:
-    #     st.markdown('<div class="btn-crono">', unsafe_allow_html=True)
-    #     if st.button("⏸️ Sosta", disabled=(st.session_state.crono_stato != "In Corso")):
-    #         st.session_state.crono_stato = "Interrotto"
-    #         st.session_state.tempo_accumulato += time.time() - st.session_state.ultimo_avvio
-    #         st.rerun()
-    #     st.markdown('</div>', unsafe_allow_html=True)
-    with col_t3:
-        st.markdown('<div class="btn-crono">', unsafe_allow_html=True)
-        if st.button("🔄 Riprendi", disabled=(st.session_state.crono_stato != "Interrotto")):
-            st.session_state.crono_stato = "In Corso"
-            st.session_state.ultimo_avvio = time.time()
-            st.rerun()
-        st.markdown('</div>', unsafe_allow_html=True)
-    with col_t4:
-        st.markdown('<div class="btn-crono">', unsafe_allow_html=True)
-        if st.button("⏹️ Fine Match", disabled=(st.session_state.crono_stato == "Fermo" and st.session_state.tempo_accumulato == 0.0)):
-            st.session_state.page = "report" 
-            st.session_state.crono_stato = "Fermo"
-            st.session_state.ultimo_avvio = None
-            st.rerun()
-        st.markdown('</div>', unsafe_allow_html=True)
+    # Controlli cronometro - 2 colonne su mobile, 3 su desktop
+    tab_crono = st.tabs(["⏱️ Cronometro"])
+    with tab_crono[0]:
+        col_t1, col_t2, col_t3 = st.columns(3)
+        with col_t1:
+            st.markdown('<div class="btn-crono">', unsafe_allow_html=True)
+            if st.button("▶️ Inizio", use_container_width=True, disabled=(st.session_state.crono_stato != "Fermo")):
+                st.session_state.crono_stato = "In Corso"
+                st.session_state.ultimo_avvio = time.time()
+                st.rerun()
+            st.markdown('</div>', unsafe_allow_html=True)
+        
+        with col_t2:
+            st.markdown('<div class="btn-crono">', unsafe_allow_html=True)
+            if st.button("🔄 Riprendi", use_container_width=True, disabled=(st.session_state.crono_stato != "Interrotto")):
+                st.session_state.crono_stato = "In Corso"
+                st.session_state.ultimo_avvio = time.time()
+                st.rerun()
+            st.markdown('</div>', unsafe_allow_html=True)
+        
+        with col_t3:
+            st.markdown('<div class="btn-crono">', unsafe_allow_html=True)
+            if st.button("⏹️ Fine", use_container_width=True, disabled=(st.session_state.crono_stato == "Fermo" and st.session_state.tempo_accumulato == 0.0)):
+                st.session_state.page = "report" 
+                st.session_state.crono_stato = "Fermo"
+                st.session_state.ultimo_avvio = None
+                st.rerun()
+            st.markdown('</div>', unsafe_allow_html=True)
 
-
-       # Intervallo
-    if st.session_state.tempo_gioco == "1° Tempo":
-        if st.button("⏸️ PASSA A INTERVALLO / 2° TEMPO"):
-            if st.session_state.crono_stato == "In Corso":
-                st.session_state.tempo_accumulato += time.time() - st.session_state.ultimo_avvio
-            st.session_state.tempo_gioco = "2° Tempo"
-            st.session_state.crono_stato = "Fermo"
-            st.session_state.tempo_accumulato = 45.0 * 60.0
-            st.rerun()
+        # Intervallo
+        if st.session_state.tempo_gioco == "1° Tempo":
+            if st.button("⏸️ PASSA A INTERVALLO / 2° TEMPO", use_container_width=True):
+                if st.session_state.crono_stato == "In Corso":
+                    st.session_state.tempo_accumulato += time.time() - st.session_state.ultimo_avvio
+                st.session_state.tempo_gioco = "2° Tempo"
+                st.session_state.crono_stato = "Fermo"
+                st.session_state.tempo_accumulato = 45.0 * 60.0
+                st.rerun()
 
     st.write("---")
 
+    # Selezione giocatore - full width su mobile
     if st.session_state.in_campo:
         giocatore_scelto = st.selectbox("👤 Seleziona Giocatore in Campo:", st.session_state.in_campo)
         is_portiere = giocatore_scelto in md['portieri']
@@ -243,10 +392,11 @@ elif st.session_state.page == "live":
         giocatore_scelto = None
         is_portiere = False
 
-    with st.expander("🔄 Effettua una Sostituzione"):
+    # Sostituzione in expander
+    with st.expander("🔄 Effettua una Sostituzione", expanded=False):
         if st.session_state.in_panchina and giocatore_scelto:
-            giocatore_entrante = st.selectbox("🪑 Chi entra dalla panchina?", st.session_state.in_panchina)
-            if st.button("📥 CONFERMA CAMBIO"):
+            giocatore_entrante = st.selectbox("🪑 Chi entra dalla panchina?", st.session_state.in_panchina, key="sub")
+            if st.button("📥 CONFERMA CAMBIO", use_container_width=True):
                 evento_cambio = {
                     "Data": md['data'].strftime('%Y-%m-%d'),
                     "Competizione": md['competizione'],
@@ -260,61 +410,75 @@ elif st.session_state.page == "live":
                 st.session_state.in_campo.remove(giocatore_scelto)
                 st.session_state.in_campo.append(giocatore_entrante)
                 st.session_state.in_panchina.remove(giocatore_entrante)
-                st.success(f"Cambio effettuato! {giocatore_scelto} -> {giocatore_entrante}")
-                time.sleep(0.5)
+                st.success(f"✅ {giocatore_scelto} → {giocatore_entrante}")
+                time.sleep(0.3)
                 st.rerun()
         else:
-            st.warning("Impossibile effettuare sostituzioni.")
+            st.warning("⚠️ Impossibile effettuare sostituzioni.")
 
-    st.write("### ⚡ Registra Evento")
+    st.markdown("### ⚡ Registra Evento")
     disabilitato = (st.session_state.crono_stato != "In Corso" or giocatore_scelto is None)
     if st.session_state.crono_stato != "In Corso":
-        st.warning("⚠️ Avvia o Riprendi il cronometro per registrare gli eventi!")
+        st.warning("⚠️ Avvia il cronometro per registrare gli eventi!")
 
     evento_registrato = None
     forzare_rimozione_espulso = False
 
+    # Bottoni portiere
     if is_portiere and giocatore_scelto:
         st.markdown("##### 🧤 Ruolo Portiere")
         riga_p1, riga_p2 = st.columns(2)
         with riga_p1:
-            if st.button("👐 Parata", disabled=disabilitato): evento_registrato = "Parata"
+            if st.button("👐 Parata", use_container_width=True, disabled=disabilitato): 
+                evento_registrato = "Parata"
         with riga_p2:
-            if st.button("🥅 Gol Subito", disabled=disabilitato): evento_registrato = "Gol Subito"
+            if st.button("🥅 Gol Subito", use_container_width=True, disabled=disabilitato): 
+                evento_registrato = "Gol Subito"
         st.write("---")
 
+    # Bottoni evento - griglia 2 colonne
     c1, c2 = st.columns(2)
     with c1:
-        if st.button("⚽ GOL!", disabled=disabilitato): evento_registrato = "GOL"
+        if st.button("⚽ GOL!", use_container_width=True, disabled=disabilitato): 
+            evento_registrato = "GOL"
     with c2:
-        if st.button("❌ Tiro Fuori", disabled=disabilitato): evento_registrato = "Tiro Fuori"
+        if st.button("❌ Tiro Fuori", use_container_width=True, disabled=disabilitato): 
+            evento_registrato = "Tiro Fuori"
 
     c3, c4 = st.columns(2)
     with c3:
-        if st.button("🎯 Tiro in Porta", disabled=disabilitato): evento_registrato = "Tiro in Porta"
+        if st.button("🎯 Tiro in Porta", use_container_width=True, disabled=disabilitato): 
+            evento_registrato = "Tiro in Porta"
     with c4:
-        if st.button("👟 Passaggio Chiave", disabled=disabilitato): evento_registrato = "Passaggio Chiave"
+        if st.button("👟 Pass Chiave", use_container_width=True, disabled=disabilitato): 
+            evento_registrato = "Passaggio Chiave"
 
     c5, c6 = st.columns(2)
     with c5:
-        if st.button("🔄 Palla Recuperata", disabled=disabilitato): evento_registrato = "Palla Recuperata"
+        if st.button("🔄 Palla Rec.", use_container_width=True, disabled=disabilitato): 
+            evento_registrato = "Palla Recuperata"
     with c6:
-        if st.button("📉 Palla Persa", disabled=disabilitato): evento_registrato = "Palla Persa"
+        if st.button("📉 Palla Persa", use_container_width=True, disabled=disabilitato): 
+            evento_registrato = "Palla Persa"
 
     c7, c8 = st.columns(2)
     with c7:
-        if st.button("💥 Fallo Subito", disabled=disabilitato): evento_registrato = "Fallo Subito"
+        if st.button("💥 Fallo Subito", use_container_width=True, disabled=disabilitato): 
+            evento_registrato = "Fallo Subito"
     with c8:
-        if st.button("🛑 Fallo Commesso", disabled=disabilitato): evento_registrato = "Fallo Commesso"
+        if st.button("🛑 Fallo Fatto", use_container_width=True, disabled=disabilitato): 
+            evento_registrato = "Fallo Commesso"
 
     c9, c10 = st.columns(2)
     with c9:
-        if st.button("🟨 Ammonito", disabled=disabilitato): evento_registrato = "Ammonito"
+        if st.button("🟨 Ammonito", use_container_width=True, disabled=disabilitato): 
+            evento_registrato = "Ammonito"
     with c10:
-        if st.button("🟥 Espulso", disabled=disabilitato): 
+        if st.button("🟥 Espulso", use_container_width=True, disabled=disabilitato): 
             evento_registrato = "Espulso"
             forzare_rimozione_espulso = True
 
+    # Registra evento
     if evento_registrato and giocatore_scelto:
         dati_evento = {
             "Data": md['data'].strftime('%Y-%m-%d'),
@@ -331,16 +495,17 @@ elif st.session_state.page == "live":
             st.session_state.in_campo.remove(giocatore_scelto)
             st.toast(f"🟥 {giocatore_scelto} ESPULSO!")
         else:
-            st.toast(f"Registrato: {giocatore_scelto} -> {evento_registrato}")
+            st.toast(f"✅ {evento_registrato}")
         
-        time.sleep(0.3)
+        time.sleep(0.2)
         st.rerun()
 
+    # Ultimi eventi
     if st.session_state.log_strutturato:
         st.write("---")
         st.markdown("##### 📝 Ultimi Eventi:")
         for ev in st.session_state.log_strutturato[:5]:
-            st.caption(f"{ev['Minuto']}' ({ev['Tempo']}) | {ev['Giocatore']} : **{ev['Evento']}**")
+            st.markdown(f"<div class='caption-small'><strong>{ev['Minuto']}'</strong> ({ev['Tempo']}) | {ev['Giocatore']}: **{ev['Evento']}**</div>", unsafe_allow_html=True)
 
 # ==========================================
 # 3. PAGINA DI REPORT, GRAFICI E ANALISI
@@ -352,7 +517,11 @@ elif st.session_state.page == "report":
         df_completo = pd.DataFrame(st.session_state.log_strutturato)
         
         st.markdown("### 🔍 Filtra Analisi")
-        filtro_tempo = st.radio("Seleziona frazione di gioco da analizzare:", ["Intera Partita", "Solo 1° Tempo", "Solo 2° Tempo"], horizontal=True)
+        filtro_tempo = st.radio(
+            "Seleziona frazione di gioco:", 
+            ["Intera Partita", "Solo 1° Tempo", "Solo 2° Tempo"], 
+            horizontal=True
+        )
         
         if filtro_tempo == "Solo 1° Tempo":
             df = df_completo[df_completo["Tempo"] == "1° Tempo"]
@@ -370,42 +539,42 @@ elif st.session_state.page == "report":
         
         st.markdown("### 📈 Numeri di Squadra")
         cm1, cm2, cm3, cm4 = st.columns(4)
-        cm1.metric("Gol Fatti", tot_gol)
-        cm2.metric("Tiri Totali", tot_tiri)
-        cm3.metric("Palle Rec.", tot_recuperi)
-        cm4.metric("Palle Perse", tot_perse)
+        cm1.metric("⚽ Gol", tot_gol)
+        cm2.metric("🎯 Tiri", tot_tiri)
+        cm3.metric("🔄 Rec.", tot_recuperi)
+        cm4.metric("📉 Perse", tot_perse)
         
         st.write("---")
         col_graf1, col_graf2 = st.columns(2)
         
         with col_graf1:
-            st.markdown("##### 🎯 Distribuzione Tiri Squadra")
+            st.markdown("##### 🎯 Tiri")
             df_tiri = df[df["Evento"].isin(["GOL", "Tiro in Porta", "Tiro Fuori"])]
             if not df_tiri.empty:
                 conteggio_tiri = df_tiri["Evento"].value_counts().reset_index()
                 conteggio_tiri.columns = ["Tipo Tiro", "Conteggio"]
                 colori_mappa = {"GOL": "#10B981", "Tiro in Porta": "#3B82F6", "Tiro Fuori": "#EF4444"}
                 fig = px.pie(conteggio_tiri, values="Conteggio", names="Tipo Tiro", color="Tipo Tiro", color_discrete_map=colori_mappa, hole=0.3)
-                fig.update_layout(margin=dict(t=10, b=10, l=10, r=10), showlegend=False)
-                st.plotly_chart(fig, use_container_width=True)
+                fig.update_layout(margin=dict(t=0, b=0, l=0, r=0), showlegend=True, height=300)
+                st.plotly_chart(fig, use_container_width=True, config={'responsive': True})
             else:
                 st.caption("Nessun tiro registrato.")
                 
         with col_graf2:
-            st.markdown("##### 🔄 Bilancio Possesso Squadra")
+            st.markdown("##### 🔄 Possesso")
             df_poss_squadra = pd.DataFrame({
-                "Fase": ["Palle Recuperate", "Palle Perse"],
+                "Fase": ["Rec.", "Perse"],
                 "Totale": [tot_recuperi, tot_perse]
             })
             if tot_recuperi > 0 or tot_perse > 0:
-                fig_poss = px.bar(df_poss_squadra, x="Fase", y="Totale", color="Fase", color_discrete_map={"Palle Recuperate": "#06B6D4", "Palle Perse": "#4B5563"})
-                fig_poss.update_layout(margin=dict(t=10, b=10, l=10, r=10), showlegend=False, xaxis_title=None, yaxis_title=None)
-                st.plotly_chart(fig_poss, use_container_width=True)
+                fig_poss = px.bar(df_poss_squadra, x="Fase", y="Totale", color="Fase", color_discrete_map={"Rec.": "#06B6D4", "Perse": "#4B5563"})
+                fig_poss.update_layout(margin=dict(t=0, b=0, l=0, r=0), showlegend=False, xaxis_title=None, yaxis_title=None, height=300)
+                st.plotly_chart(fig_poss, use_container_width=True, config={'responsive': True})
             else:
                 st.caption("Nessun dato di possesso.")
 
         st.write("---")
-        st.markdown("### 👤 KPI e Statistiche Individuali")
+        st.markdown("### 👤 KPI Individuali")
         giocatore_kpi = st.selectbox("Scegli Giocatore:", st.session_state.tutti_giocatori_coinvolti)
         df_singolo = df[df["Giocatore"] == giocatore_kpi]
         
@@ -423,43 +592,46 @@ elif st.session_state.page == "report":
         g_parate = len(df_singolo[df_singolo["Evento"] == "Parata"])
         
         ck1, ck2, ck3, ck4 = st.columns(4)
-        ck1.metric("Gol Segnati", g_gol)
-        ck2.metric("Tiri Totali (In Porta)", f"{g_tiri} ({g_in_porta})")
-        ck3.metric("Palle Recuperate", g_recuperate)
-        ck4.metric("Palle Perse", g_perse)
+        ck1.metric("Gol", g_gol)
+        ck2.metric("Tiri", f"{g_tiri} ({g_in_porta})")
+        ck3.metric("Rec.", g_recuperate)
+        ck4.metric("Perse", g_perse)
         
         ck5, ck6, ck7, ck8 = st.columns(4)
-        ck5.metric("Passaggi Chiave", g_chiave)
-        ck6.metric("Falli Subiti / Fatti", f"{g_subiti} / {g_commessi}")
-        ck7.metric("Cartellini (G/R)", f"{g_ammo} / {g_espu}")
+        ck5.metric("Pass Ch.", g_chiave)
+        ck6.metric("Falli", f"{g_subiti}/{g_commessi}")
+        ck7.metric("Cartellini", f"{g_ammo}/{g_espu}")
         if g_parate > 0 or giocatore_kpi in st.session_state.match_data['portieri']:
-            ck8.metric("Parate Effettuate", g_parate)
+            ck8.metric("Parate", g_parate)
         else:
-            ck8.metric("Stato", "In Campo" if giocatore_kpi in st.session_state.in_campo else "Panchina/Sostituito/Espulso")
+            stato = "In Campo" if giocatore_kpi in st.session_state.in_campo else "Panchina"
+            ck8.metric("Stato", stato)
             
         if not df_singolo.empty:
-            st.caption(f"Cronologia azioni di {giocatore_kpi}:")
-            eventi_brevi = [f"{row['Minuto']}' ({row['Tempo']}) - {row['Evento']}" for _, row in df_singolo.iterrows()]
-            st.write(", ".join(eventi_brevi))
+            st.markdown("**Cronologia azioni:**")
+            eventi_brevi = [f"{row['Minuto']}' - {row['Evento']}" for _, row in df_singolo.iterrows()]
+            st.markdown(", ".join(eventi_brevi), unsafe_allow_html=False)
 
         st.write("---")
-        st.markdown("### 📋 Tabella Completa Eventi")
-        st.dataframe(df_completo[["Tempo", "Minuto", "Giocatore", "Evento"]], use_container_width=True)
+        st.markdown("### 📋 Tabella Eventi")
+        
+        # Tabella con scroll orizzontale su mobile
+        df_display = df_completo[["Tempo", "Minuto", "Giocatore", "Evento"]].copy()
+        df_display["Minuto"] = df_display["Minuto"].astype(int)
+        st.dataframe(df_display, use_container_width=True, height=300)
         
         csv = df_completo.to_csv(index=False).encode('utf-8')
         nome_file = f"scout_{st.session_state.match_data['casa']}_vs_{st.session_state.match_data['trasferta']}.csv"
-        st.download_button(label="📥 SCARICA DATABASE CSV", data=csv, file_name=nome_file, mime='text/csv')
+        st.download_button(
+            label="📥 SCARICA CSV", 
+            data=csv, 
+            file_name=nome_file, 
+            mime='text/csv',
+            use_container_width=True
+        )
         
     st.write("---")
-    if st.button("🔄 Inizia un nuovo match (Reset)"):
+    if st.button("🔄 Nuovo Match", use_container_width=True):
         st.session_state.page = "setup"
         st.session_state.log_strutturato = []
         st.rerun()
-    st.markdown("""
-    <style>
-    /* Aggiunge spazio in fondo per non farsi coprire dalla barra Streamlit */
-    .block-container {
-        padding-bottom: 80px !important;
-    }
-    </style>
-""", unsafe_allow_html=True)
