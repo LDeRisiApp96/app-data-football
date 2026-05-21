@@ -57,12 +57,26 @@ st.markdown("""
         touch-action: manipulation !important;
     }
     
+    /* Bottoni dentro colonne - ridimensiona per 2 colonne */
+    div[data-testid="column"] div.stButton > button {
+        width: 100% !important;
+        font-size: 13px !important;
+        height: 48px !important;
+        padding: 0.4rem !important;
+    }
+    
     @media (max-width: 768px) {
         div.stButton > button {
             font-size: 10px !important;
             height: 36px !important;
             padding: 0.3rem !important;
             margin-bottom: 0.25rem !important;
+        }
+        
+        div[data-testid="column"] div.stButton > button {
+            font-size: 9px !important;
+            height: 34px !important;
+            padding: 0.25rem !important;
         }
     }
     
@@ -242,6 +256,11 @@ st.markdown("""
         margin-top: 0.5rem !important;
         margin-bottom: 0.5rem !important;
     }
+    
+    /* Spazio superiore per pagina live */
+    .live-page-top-space {
+        height: 1.5rem;
+    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -328,6 +347,9 @@ if st.session_state.page == "setup":
 # 2. PAGINA LIVE (RACCOLTA DATI)
 # ==========================================
 elif st.session_state.page == "live":
+    # Aggiungi spazio superiore per evitare che il contenuto sia coperto
+    st.markdown("<div class='live-page-top-space'></div>", unsafe_allow_html=True)
+    
     md = st.session_state.match_data
 
     st.markdown(f"""
