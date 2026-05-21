@@ -37,11 +37,49 @@ st.markdown("""
         max-width: 100% !important;
     }
     
+    /* Spazio superiore pagina live */
+    .live-top-space {
+        height: 2rem;
+        margin-bottom: 0.5rem;
+    }
+    
     /* Riduco margini su mobile */
     @media (max-width: 768px) {
         .block-container {
             padding: 0.5rem !important;
             padding-bottom: 120px !important;
+        }
+    }
+    
+    /* Grid per bottoni affiancati */
+    .buttons-grid {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 0.5rem !important;
+        margin-bottom: 0.5rem;
+    }
+    
+    .buttons-grid > div {
+        width: 100% !important;
+    }
+    
+    .buttons-grid button {
+        width: 100% !important;
+        font-size: 13px !important;
+        height: 45px !important;
+        padding: 0.4rem !important;
+        border-radius: 8px !important;
+        color: white !important;
+        font-weight: bold !important;
+        border: none !important;
+        touch-action: manipulation !important;
+    }
+    
+    @media (max-width: 768px) {
+        .buttons-grid button {
+            font-size: 10px !important;
+            height: 38px !important;
+            padding: 0.3rem !important;
         }
     }
     
@@ -57,26 +95,12 @@ st.markdown("""
         touch-action: manipulation !important;
     }
     
-    /* Bottoni dentro colonne - ridimensiona per 2 colonne */
-    div[data-testid="column"] div.stButton > button {
-        width: 100% !important;
-        font-size: 13px !important;
-        height: 48px !important;
-        padding: 0.4rem !important;
-    }
-    
     @media (max-width: 768px) {
         div.stButton > button {
             font-size: 10px !important;
             height: 36px !important;
             padding: 0.3rem !important;
             margin-bottom: 0.25rem !important;
-        }
-        
-        div[data-testid="column"] div.stButton > button {
-            font-size: 9px !important;
-            height: 34px !important;
-            padding: 0.25rem !important;
         }
     }
     
@@ -256,11 +280,6 @@ st.markdown("""
         margin-top: 0.5rem !important;
         margin-bottom: 0.5rem !important;
     }
-    
-    /* Spazio superiore per pagina live */
-    .live-page-top-space {
-        height: 1.5rem;
-    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -347,8 +366,8 @@ if st.session_state.page == "setup":
 # 2. PAGINA LIVE (RACCOLTA DATI)
 # ==========================================
 elif st.session_state.page == "live":
-    # Aggiungi spazio superiore per evitare che il contenuto sia coperto
-    st.markdown("<div class='live-page-top-space'></div>", unsafe_allow_html=True)
+    # Spazio superiore per evitare sovrapposizione
+    st.markdown("<div class='live-top-space'></div>", unsafe_allow_html=True)
     
     md = st.session_state.match_data
 
@@ -453,16 +472,19 @@ elif st.session_state.page == "live":
     # Bottoni portiere
     if is_portiere and giocatore_scelto:
         st.markdown("##### 🧤 Ruolo Portiere")
-        riga_p1, riga_p2 = st.columns(2)
-        with riga_p1:
+        st.markdown('<div class="buttons-grid">', unsafe_allow_html=True)
+        col1, col2 = st.columns(2)
+        with col1:
             if st.button("👐 Parata", use_container_width=True, disabled=disabilitato): 
                 evento_registrato = "Parata"
-        with riga_p2:
+        with col2:
             if st.button("🥅 Gol Subito", use_container_width=True, disabled=disabilitato): 
                 evento_registrato = "Gol Subito"
+        st.markdown('</div>', unsafe_allow_html=True)
         st.write("---")
 
-    # Bottoni evento - griglia 2 colonne (coppie di bottoni)
+    # Bottoni evento - griglia 2 colonne con HTML wrapper
+    st.markdown('<div class="buttons-grid">', unsafe_allow_html=True)
     c1, c2 = st.columns(2)
     with c1:
         if st.button("⚽ GOL!", use_container_width=True, disabled=disabilitato): 
@@ -470,7 +492,9 @@ elif st.session_state.page == "live":
     with c2:
         if st.button("❌ Tiro Fuori", use_container_width=True, disabled=disabilitato): 
             evento_registrato = "Tiro Fuori"
+    st.markdown('</div>', unsafe_allow_html=True)
 
+    st.markdown('<div class="buttons-grid">', unsafe_allow_html=True)
     c3, c4 = st.columns(2)
     with c3:
         if st.button("🎯 Tiro in Porta", use_container_width=True, disabled=disabilitato): 
@@ -478,7 +502,9 @@ elif st.session_state.page == "live":
     with c4:
         if st.button("👟 Pass Chiave", use_container_width=True, disabled=disabilitato): 
             evento_registrato = "Passaggio Chiave"
+    st.markdown('</div>', unsafe_allow_html=True)
 
+    st.markdown('<div class="buttons-grid">', unsafe_allow_html=True)
     c5, c6 = st.columns(2)
     with c5:
         if st.button("🔄 Palla Rec.", use_container_width=True, disabled=disabilitato): 
@@ -486,7 +512,9 @@ elif st.session_state.page == "live":
     with c6:
         if st.button("📉 Palla Persa", use_container_width=True, disabled=disabilitato): 
             evento_registrato = "Palla Persa"
+    st.markdown('</div>', unsafe_allow_html=True)
 
+    st.markdown('<div class="buttons-grid">', unsafe_allow_html=True)
     c7, c8 = st.columns(2)
     with c7:
         if st.button("💥 Fallo Subito", use_container_width=True, disabled=disabilitato): 
@@ -494,7 +522,9 @@ elif st.session_state.page == "live":
     with c8:
         if st.button("🛑 Fallo Fatto", use_container_width=True, disabled=disabilitato): 
             evento_registrato = "Fallo Commesso"
+    st.markdown('</div>', unsafe_allow_html=True)
 
+    st.markdown('<div class="buttons-grid">', unsafe_allow_html=True)
     c9, c10 = st.columns(2)
     with c9:
         if st.button("🟨 Ammonito", use_container_width=True, disabled=disabilitato): 
@@ -503,6 +533,7 @@ elif st.session_state.page == "live":
         if st.button("🟥 Espulso", use_container_width=True, disabled=disabilitato): 
             evento_registrato = "Espulso"
             forzare_rimozione_espulso = True
+    st.markdown('</div>', unsafe_allow_html=True)
 
     # Registra evento
     if evento_registrato and giocatore_scelto:
