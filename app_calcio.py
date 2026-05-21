@@ -162,37 +162,85 @@ elif st.session_state.page == "live":
     # Avvio del fragment orologio in background
     mostra_orologio()
 
-    # Controlli cronometro
-    col_t1, col_t3,col_t4 = st.columns(3)
-    with col_t1:
-        st.markdown('<div class="btn-crono">', unsafe_allow_html=True)
+    # # Controlli cronometro
+    # col_t1, col_t3,col_t4 = st.columns(3)
+    # with col_t1:
+    #     st.markdown('<div class="btn-crono">', unsafe_allow_html=True)
+    #     if st.button("▶️ Inizio", disabled=(st.session_state.crono_stato != "Fermo")):
+    #         st.session_state.crono_stato = "In Corso"
+    #         st.session_state.ultimo_avvio = time.time()
+    #         st.rerun()
+    #     st.markdown('</div>', unsafe_allow_html=True)
+    # # with col_t2:
+    # #     st.markdown('<div class="btn-crono">', unsafe_allow_html=True)
+    # #     if st.button("⏸️ Sosta", disabled=(st.session_state.crono_stato != "In Corso")):
+    # #         st.session_state.crono_stato = "Interrotto"
+    # #         st.session_state.tempo_accumulato += time.time() - st.session_state.ultimo_avvio
+    # #         st.rerun()
+    # #     st.markdown('</div>', unsafe_allow_html=True)
+    # with col_t3:
+    #     st.markdown('<div class="btn-crono">', unsafe_allow_html=True)
+    #     if st.button("🔄 Riprendi", disabled=(st.session_state.crono_stato != "Interrotto")):
+    #         st.session_state.crono_stato = "In Corso"
+    #         st.session_state.ultimo_avvio = time.time()
+    #         st.rerun()
+    #     st.markdown('</div>', unsafe_allow_html=True)
+    # with col_t4:
+    #     st.markdown('<div class="btn-crono">', unsafe_allow_html=True)
+    #     if st.button("⏹️ Fine Match", disabled=(st.session_state.crono_stato == "Fermo" and st.session_state.tempo_accumulato == 0.0)):
+    #         st.session_state.page = "report" 
+    #         st.session_state.crono_stato = "Fermo"
+    #         st.session_state.ultimo_avvio = None
+    #         st.rerun()
+    #     st.markdown('</div>', unsafe_allow_html=True)
+    st.markdown("""
+    <style>
+    /* Forza il contenitore a essere una riga singola su qualsiasi dispositivo */
+    .mobile-row {
+        display: flex !important;
+        flex-direction: row !important;
+        justify-content: space-between !important;
+        width: 100% !important;
+        gap: 5px !important;
+    }
+    /* Forza ogni bottone a occupare lo spazio necessario senza andare a capo */
+    .mobile-row > div {
+        flex: 1 !important;
+        min-width: 0 !important;
+    }
+    .mobile-row button {
+        width: 100% !important;
+        font-size: 12px !important;
+        padding: 5px 2px !important;
+        white-space: nowrap !important;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
+    # --- CODICE LIVE (SOSTITUISCI LA SEZIONE BOTTONI) ---
+    st.markdown('<div class="mobile-row">', unsafe_allow_html=True)
+    
+    # Usiamo colonne di supporto ma dentro il div forzato
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
         if st.button("▶️ Inizio", disabled=(st.session_state.crono_stato != "Fermo")):
             st.session_state.crono_stato = "In Corso"
             st.session_state.ultimo_avvio = time.time()
             st.rerun()
-        st.markdown('</div>', unsafe_allow_html=True)
-    # with col_t2:
-    #     st.markdown('<div class="btn-crono">', unsafe_allow_html=True)
-    #     if st.button("⏸️ Sosta", disabled=(st.session_state.crono_stato != "In Corso")):
-    #         st.session_state.crono_stato = "Interrotto"
-    #         st.session_state.tempo_accumulato += time.time() - st.session_state.ultimo_avvio
-    #         st.rerun()
-    #     st.markdown('</div>', unsafe_allow_html=True)
-    with col_t3:
-        st.markdown('<div class="btn-crono">', unsafe_allow_html=True)
-        if st.button("🔄 Riprendi", disabled=(st.session_state.crono_stato != "Interrotto")):
+    
+    with col2:
+        if st.button("🔄 Ripr.", disabled=(st.session_state.crono_stato != "Interrotto")):
             st.session_state.crono_stato = "In Corso"
             st.session_state.ultimo_avvio = time.time()
             st.rerun()
-        st.markdown('</div>', unsafe_allow_html=True)
-    with col_t4:
-        st.markdown('<div class="btn-crono">', unsafe_allow_html=True)
-        if st.button("⏹️ Fine Match", disabled=(st.session_state.crono_stato == "Fermo" and st.session_state.tempo_accumulato == 0.0)):
-            st.session_state.page = "report" 
-            st.session_state.crono_stato = "Fermo"
-            st.session_state.ultimo_avvio = None
+    
+    with col3:
+        if st.button("⏹️ Fine", disabled=(st.session_state.crono_stato == "Fermo" and st.session_state.tempo_accumulato == 0.0)):
+            st.session_state.page = "report"
             st.rerun()
-        st.markdown('</div>', unsafe_allow_html=True)
+    
+    st.markdown('</div>', unsafe_allow_html=True)
 
     # Intervallo
     if st.session_state.tempo_gioco == "1° Tempo":
