@@ -35,7 +35,6 @@ st.markdown("""
         padding: 1rem !important;
         padding-bottom: 120px !important;
         max-width: 100% !important;
-        padding-top: 120px !important;
     }
     
     /* Riduco margini su mobile */
@@ -43,7 +42,6 @@ st.markdown("""
         .block-container {
             padding: 0.5rem !important;
             padding-bottom: 120px !important;
-            padding-top: 80px !important;
         }
     }
     
@@ -61,9 +59,10 @@ st.markdown("""
     
     @media (max-width: 768px) {
         div.stButton > button {
-            font-size: 13px !important;
-            height: 48px !important;
-            padding: 0.5rem !important;
+            font-size: 10px !important;
+            height: 36px !important;
+            padding: 0.3rem !important;
+            margin-bottom: 0.25rem !important;
         }
     }
     
@@ -78,25 +77,19 @@ st.markdown("""
     div.stButton > button:has(p:contains("CONFERMA")) { background-color: #F97316 !important; border: none !important; }
     div.stButton > button:has(p:contains("PASSA A")) { background-color: #F97316 !important; border: none !important; }
     
-    /* Bottoni cronometro compatti - su una sola riga */
+    /* Bottoni cronometro compatti */
     .btn-crono button { 
         background-color: #374151 !important; 
-        height: 44px !important; 
+        height: 40px !important; 
         font-size: 12px !important;
-        margin-bottom: 0.3rem !important;
-        flex: 1 !important;
-        margin-right: 0.25rem !important;
-    }
-    
-    .btn-crono button:last-child {
-        margin-right: 0 !important;
+        margin-bottom: 0.2rem !important;
     }
     
     @media (max-width: 768px) {
         .btn-crono button {
-            height: 42px !important;
-            font-size: 11px !important;
-            margin-right: 0.15rem !important;
+            height: 32px !important;
+            font-size: 9px !important;
+            margin-bottom: 0.15rem !important;
         }
     }
     
@@ -122,7 +115,7 @@ st.markdown("""
         padding: 12px; 
         border-radius: 12px; 
         border-left: 4px solid #1E3A8A; 
-        margin-bottom: 1rem;
+        margin-bottom: 0.5rem;
         font-size: 14px;
     }
     
@@ -142,7 +135,7 @@ st.markdown("""
     @media (max-width: 768px) {
         .match-info-banner {
             padding: 10px;
-            margin-bottom: 0.75rem;
+            margin-bottom: 0.4rem;
         }
         .match-info-banner small {
             font-size: 11px;
@@ -152,27 +145,24 @@ st.markdown("""
         }
     }
     
-    /* Timer fisso top-right */
-    .timer-top-left {
-        position: fixed; 
-        top: 50px; 
-        right: 10px;
+    /* Timer inline sotto il banner */
+    .timer-inline {
         background-color: #FF4B4B; 
         color: white;
-        padding: 6px 12px; 
+        padding: 8px 16px; 
         border-radius: 20px;
         font-weight: bold; 
-        font-size: 14px;
-        z-index: 9999; 
+        font-size: 16px;
+        text-align: center;
+        margin-bottom: 1rem;
         box-shadow: 0px 4px 6px rgba(0,0,0,0.3);
     }
     
     @media (max-width: 768px) {
-        .timer-top-left {
-            font-size: 12px;
-            padding: 5px 10px;
-            top: 48px;
-            right: 8px;
+        .timer-inline {
+            font-size: 14px;
+            padding: 6px 12px;
+            margin-bottom: 0.75rem;
         }
     }
     
@@ -242,9 +232,15 @@ st.markdown("""
         padding: 0.75rem !important;
     }
     
-    /* Separatore */
+    /* Separatore compatto */
     hr {
-        margin: 0.75rem 0 !important;
+        margin: 0.5rem 0 !important;
+    }
+    
+    /* Heading compatti */
+    h2, h3, h4, h5 {
+        margin-top: 0.5rem !important;
+        margin-bottom: 0.5rem !important;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -273,7 +269,7 @@ def mostra_orologio():
     
     minuto_calcistico = int(passato // 60) + 1
     m, s = int(passato // 60), int(passato % 60)
-    st.markdown(f"<div class='timer-top-left'>⏱️ {m:02d}:{s:02d} ({minuto_calcistico}')</div>", unsafe_allow_html=True)
+    st.markdown(f"<div class='timer-inline'>⏱️ {m:02d}:{s:02d} ({minuto_calcistico}')</div>", unsafe_allow_html=True)
 
 # ==========================================
 # 1. PAGINA INIZIALE (SETUP)
@@ -348,44 +344,46 @@ elif st.session_state.page == "live":
         passato_corrente = st.session_state.tempo_accumulato
     minuto_calcistico = int(passato_corrente // 60) + 1
 
-    # Avvio del fragment orologio in background
+    # Avvio del fragment orologio in background (ora inline sotto il banner)
     mostra_orologio()
 
     # Controlli cronometro - 3 bottoni su una riga
-    tab_crono = st.tabs(["⏱️ Cronometro"])
-    with tab_crono[0]:
-        col_t1, col_t2, col_t3 = st.columns(3)
-        
-        with col_t1:
-            st.markdown('<div class="btn-crono" style="display: flex; gap: 0.25rem;">', unsafe_allow_html=True)
-            if st.button("▶️ Inizio", use_container_width=True, disabled=(st.session_state.crono_stato != "Fermo")):
-                st.session_state.crono_stato = "In Corso"
-                st.session_state.ultimo_avvio = time.time()
-                st.rerun()
-        
-        with col_t2:
-            if st.button("🔄 Riprendi", use_container_width=True, disabled=(st.session_state.crono_stato != "Interrotto")):
-                st.session_state.crono_stato = "In Corso"
-                st.session_state.ultimo_avvio = time.time()
-                st.rerun()
-        
-        with col_t3:
-            if st.button("⏹️ Fine", use_container_width=True, disabled=(st.session_state.crono_stato == "Fermo" and st.session_state.tempo_accumulato == 0.0)):
-                st.session_state.page = "report" 
-                st.session_state.crono_stato = "Fermo"
-                st.session_state.ultimo_avvio = None
-                st.rerun()
-            st.markdown('</div>', unsafe_allow_html=True)
+    col_t1, col_t2, col_t3 = st.columns(3)
+    
+    with col_t1:
+        st.markdown('<div class="btn-crono">', unsafe_allow_html=True)
+        if st.button("▶️ Inizio", use_container_width=True, disabled=(st.session_state.crono_stato != "Fermo")):
+            st.session_state.crono_stato = "In Corso"
+            st.session_state.ultimo_avvio = time.time()
+            st.rerun()
+        st.markdown('</div>', unsafe_allow_html=True)
+    
+    with col_t2:
+        st.markdown('<div class="btn-crono">', unsafe_allow_html=True)
+        if st.button("🔄 Riprendi", use_container_width=True, disabled=(st.session_state.crono_stato != "Interrotto")):
+            st.session_state.crono_stato = "In Corso"
+            st.session_state.ultimo_avvio = time.time()
+            st.rerun()
+        st.markdown('</div>', unsafe_allow_html=True)
+    
+    with col_t3:
+        st.markdown('<div class="btn-crono">', unsafe_allow_html=True)
+        if st.button("⏹️ Fine", use_container_width=True, disabled=(st.session_state.crono_stato == "Fermo" and st.session_state.tempo_accumulato == 0.0)):
+            st.session_state.page = "report" 
+            st.session_state.crono_stato = "Fermo"
+            st.session_state.ultimo_avvio = None
+            st.rerun()
+        st.markdown('</div>', unsafe_allow_html=True)
 
-        # Intervallo
-        if st.session_state.tempo_gioco == "1° Tempo":
-            if st.button("⏸️ PASSA A INTERVALLO / 2° TEMPO", use_container_width=True):
-                if st.session_state.crono_stato == "In Corso":
-                    st.session_state.tempo_accumulato += time.time() - st.session_state.ultimo_avvio
-                st.session_state.tempo_gioco = "2° Tempo"
-                st.session_state.crono_stato = "Fermo"
-                st.session_state.tempo_accumulato = 45.0 * 60.0
-                st.rerun()
+    # Intervallo - bottone grande
+    if st.session_state.tempo_gioco == "1° Tempo":
+        if st.button("⏸️ PASSA A INTERVALLO / 2° TEMPO", use_container_width=True):
+            if st.session_state.crono_stato == "In Corso":
+                st.session_state.tempo_accumulato += time.time() - st.session_state.ultimo_avvio
+            st.session_state.tempo_gioco = "2° Tempo"
+            st.session_state.crono_stato = "Fermo"
+            st.session_state.tempo_accumulato = 45.0 * 60.0
+            st.rerun()
 
     st.write("---")
 
