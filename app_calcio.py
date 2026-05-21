@@ -18,6 +18,20 @@ st.markdown("""
 """, unsafe_allow_html=True)
 st.markdown("""
     <style>
+    /* Forza il contenitore delle colonne a restare in riga anche su mobile */
+    [data-testid="column"] {
+        width: calc(25% - 1rem) !important;
+        flex: 1 1 calc(25% - 1rem) !important;
+        min-width: calc(25% - 1rem) !important;
+    }
+    /* Rimuove lo spazio extra che spesso causa l'impilamento */
+    div[data-testid="stHorizontalBlock"] {
+        gap: 0.5rem !important;
+    }
+    </style>
+""", unsafe_allow_html=True)
+st.markdown("""
+    <style>
     div.stButton > button {
         font-size: 16px !important;
         height: 55px !important;
