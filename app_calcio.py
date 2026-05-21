@@ -6,16 +6,7 @@ import plotly.express as px
 
 # --- CONFIGURAZIONE PAGINA ---
 st.set_page_config(page_title="Scout Pro", page_icon="⚽", layout="centered")
-
-# --- CSS DEFINITIVO PER BOTTONI E LAYOUT ---
-st.markdown("""
-    <style>
-    /* Aggiunge spazio in fondo per non farsi coprire dalla barra Streamlit */
-    .block-container {
-        padding-bottom: 100px !important;
-    }
-    </style>
-""", unsafe_allow_html=True)
+###config mobile
 st.markdown("""
     <style>
     /* Forza il contenitore delle colonne a restare in riga anche su mobile */
@@ -30,6 +21,17 @@ st.markdown("""
     }
     </style>
 """, unsafe_allow_html=True)
+
+# --- CSS DEFINITIVO PER BOTTONI E LAYOUT ---
+st.markdown("""
+    <style>
+    /* Aggiunge spazio in fondo per non farsi coprire dalla barra Streamlit */
+    .block-container {
+        padding-bottom: 100px !important;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
 st.markdown("""
     <style>
     div.stButton > button {
