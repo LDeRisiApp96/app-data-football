@@ -51,21 +51,6 @@ st.markdown("""
         }
     }
     
-    /* Fix per colonne a 2 su mobile PORTRAIT */
-    @media (max-width: 768px) {
-        div[data-testid="column"] {
-            max-width: calc(50% - 0.25rem) !important;
-            flex: 0 0 calc(50% - 0.25rem) !important;
-            display: inline-block !important;
-            margin-right: 0.5rem !important;
-            margin-bottom: 0.5rem !important;
-        }
-        
-        div[data-testid="column"]:nth-child(even) {
-            margin-right: 0 !important;
-        }
-    }
-    
     /* Bottoni ottimizzati per mobile */
     div.stButton > button {
         font-size: 14px !important;
@@ -200,14 +185,6 @@ st.markdown("""
     /* Espander mobile */
     .st-expander {
         border-color: #374151 !important;
-    }
-    
-    /* Colonne responsive - stack su mobile */
-    @media (max-width: 768px) {
-        div[data-testid="column"] {
-            flex-direction: column !important;
-            width: 100% !important;
-        }
     }
     
     /* Metriche responsive */
@@ -455,53 +432,58 @@ elif st.session_state.page == "live":
     # Bottoni portiere
     if is_portiere and giocatore_scelto:
         st.markdown("##### 🧤 Ruolo Portiere")
-        riga_p1, riga_p2 = st.columns(2)
-        with riga_p1:
+        col_p1, col_p2 = st.columns(2)
+        with col_p1:
             if st.button("👐 Parata", use_container_width=True, disabled=disabilitato): 
                 evento_registrato = "Parata"
-        with riga_p2:
+        with col_p2:
             if st.button("🥅 Gol Subito", use_container_width=True, disabled=disabilitato): 
                 evento_registrato = "Gol Subito"
         st.write("---")
 
     # Bottoni evento - griglia 2 colonne (coppie di bottoni)
-    c1, c2 = st.columns(2)
-    with c1:
+    # Row 1
+    col1_r1, col2_r1 = st.columns(2)
+    with col1_r1:
         if st.button("⚽ GOL!", use_container_width=True, disabled=disabilitato): 
             evento_registrato = "GOL"
-    with c2:
+    with col2_r1:
         if st.button("❌ Tiro Fuori", use_container_width=True, disabled=disabilitato): 
             evento_registrato = "Tiro Fuori"
 
-    c3, c4 = st.columns(2)
-    with c3:
+    # Row 2
+    col1_r2, col2_r2 = st.columns(2)
+    with col1_r2:
         if st.button("🎯 Tiro in Porta", use_container_width=True, disabled=disabilitato): 
             evento_registrato = "Tiro in Porta"
-    with c4:
+    with col2_r2:
         if st.button("👟 Pass Chiave", use_container_width=True, disabled=disabilitato): 
             evento_registrato = "Passaggio Chiave"
 
-    c5, c6 = st.columns(2)
-    with c5:
+    # Row 3
+    col1_r3, col2_r3 = st.columns(2)
+    with col1_r3:
         if st.button("🔄 Palla Rec.", use_container_width=True, disabled=disabilitato): 
             evento_registrato = "Palla Recuperata"
-    with c6:
+    with col2_r3:
         if st.button("📉 Palla Persa", use_container_width=True, disabled=disabilitato): 
             evento_registrato = "Palla Persa"
 
-    c7, c8 = st.columns(2)
-    with c7:
+    # Row 4
+    col1_r4, col2_r4 = st.columns(2)
+    with col1_r4:
         if st.button("💥 Fallo Subito", use_container_width=True, disabled=disabilitato): 
             evento_registrato = "Fallo Subito"
-    with c8:
+    with col2_r4:
         if st.button("🛑 Fallo Fatto", use_container_width=True, disabled=disabilitato): 
             evento_registrato = "Fallo Commesso"
 
-    c9, c10 = st.columns(2)
-    with c9:
+    # Row 5
+    col1_r5, col2_r5 = st.columns(2)
+    with col1_r5:
         if st.button("🟨 Ammonito", use_container_width=True, disabled=disabilitato): 
             evento_registrato = "Ammonito"
-    with c10:
+    with col2_r5:
         if st.button("🟥 Espulso", use_container_width=True, disabled=disabilitato): 
             evento_registrato = "Espulso"
             forzare_rimozione_espulso = True
