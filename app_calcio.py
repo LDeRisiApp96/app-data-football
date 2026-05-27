@@ -51,6 +51,23 @@ st.markdown("""
         }
     }
     
+    /* FORZA COLONNE 2x2 SU MOBILE PORTRAIT */
+    @media (max-width: 600px) {
+        /* Target container colonne */
+        div[data-testid="row"] {
+            display: flex !important;
+            flex-wrap: wrap !important;
+            gap: 0.5rem !important;
+        }
+        
+        div[data-testid="column"] {
+            flex: 0 0 calc(50% - 0.25rem) !important;
+            max-width: calc(50% - 0.25rem) !important;
+            display: flex !important;
+            flex-direction: column !important;
+        }
+    }
+    
     /* Bottoni ottimizzati per mobile */
     div.stButton > button {
         font-size: 14px !important;
